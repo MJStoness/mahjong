@@ -1,17 +1,32 @@
+generateBoard(board1);
+recalculateBrightness();
+recalculateShift();
+
 const tilesClickables = document.querySelectorAll('.tile-clickable');
 
 tilesClickables.forEach(tilesClickable => {
     const checkSides = (tile) => {
-        let collisions = 0;
+        let collisionsLeft = -1;
+        let collisionsRight = -1;
+        const left = tile.querySelector('.tile-hitbox-left');
+        const right = tile.querySelector('.tile-hitbox-right');
         const level = tilesClickable.parentElement.parentElement;
         const tiles = level.querySelectorAll('.tile')
         tiles.forEach(tile2 => {
-            if (overlap(tile, tile2)) {
-                collisions++;
+            if (overlap(left, tile2)) {
+                collisionsLeft++;
             }
         })
-        if ( collisions > 2 ) return false;
-        else return true;
+        tiles.forEach(tile2 => {
+            if (overlap(right, tile2)) {
+                collisionsRight++;
+            }
+        })
+        if ( collisionsLeft == 0 || collisionsRight == 0 ) return true;
+        else return false;
+        //console.log("Left: "+collisionsLeft+", Right: "+collisionsRight)
+        /* if ( collisions > 2 ) return false;
+        else return true; */
     }
 
     const checkTop = (tile) => {
@@ -76,8 +91,6 @@ tilesClickables.forEach(tilesClickable => {
         
     }
 });
-
-
 
 function overlap(tile1, tile2) {
     const tileRect1 = tile1.getBoundingClientRect();

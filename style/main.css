@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     --tile-height: min( calc( 0.073 * 100vh ), calc( 0.054 * 100vw ) );
     --chosen-color: #ffffff;
+    --white: #ebe2d8;
+    --border: #bdb5ad;
+    font-family: 'Geologica', sans-serif;
 }
   
 body {
@@ -19,9 +24,9 @@ body {
     display: grid;
     grid-template: 1fr / 1fr;
     position: relative;
-    /* outline: 1px solid aqua; */
     width: calc( 15.47 * var(--tile-height) );
     height: calc( 12.09 * var(--tile-height) );
+    margin-top: calc( 2 * var(--tile-height) );
     position: relative;
 }
 
@@ -46,7 +51,7 @@ body {
   
 .tile {
     /* outline: 1px solid red; */
-    height: var(--tile-height);
+    height: calc( var(--tile-height) );
     width: calc(var(--tile-height) * 1.46);
     display: flex;
     justify-content: center;
@@ -88,6 +93,28 @@ body {
     transform: translateX(-2px);
     height: 121%;
     /* outline: 1px solid orange; */
+}
+
+.tile-hitbox-left, .tile-hitbox-right {
+    position: absolute;
+    width: calc( 0.4 * var(--tile-height) );
+    height: calc( 0.7 * var(--tile-height) );
+    /* outline: 1px solid magenta; */
+}
+.tile-hitbox-left {
+    left: 0;
+}
+.tile-hitbox-right {
+    right: 0;
+}
+
+#display {
+    position: absolute;
+    top: 10px;
+    background-color: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
 }
 
 @keyframes lift {

@@ -1,12 +1,9 @@
-const levels = document.querySelectorAll('.level');
-
 const opacityMultiplier = 0.08;
-const tileSize = parseInt(getComputedStyle(document.querySelector('.tile')).height);
-const shift = -0.0857 * tileSize;
-
 
 const recalculateBrightness = () => {
     const levels = document.querySelectorAll('.level');
+    const tileSize = parseInt(getComputedStyle(document.querySelector('.tile')).height);
+    const shift = -0.0857 * tileSize;
     let i = 0;
     levels.forEach(level => {
         if ( level.querySelector('.tile') ) i++
@@ -22,11 +19,13 @@ const recalculateBrightness = () => {
         i--;
     });
 }
-
-recalculateBrightness();
-
-let j = 0;
-levels.forEach(level => {
-    level.style.transform = 'translate(' + j * shift + 'px, ' + j * shift + 'px)';
-    j++;
-});
+const recalculateShift = () => {
+    const tileSize = parseInt(getComputedStyle(document.querySelector('.tile')).height);
+    const shift = -0.0857 * tileSize;
+    const levels = document.querySelectorAll('.level');
+    let j = 0;
+    levels.forEach(level => {
+        level.style.transform = 'translate(' + j * shift + 'px, ' + j * shift + 'px)';
+        j++;
+    });
+}

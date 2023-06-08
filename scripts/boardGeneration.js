@@ -39,7 +39,6 @@ const board1 = [
         [1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0],
         [3,1],[4,1],[5,1],[6,1],[7,1],[8,1],[9,1],[10,1],
         [2,2],[3,2],[4,2],[5,2],[6,2],[7,2],[8,2],[9,2],[10,2],[11,2],
-        [1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[9,3],[10,3],[11,3],[12,3],
         [0, 3.5],
         [1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[9,3],[10,3],[11,3],[12,3],
         [1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[10,4],[11,4],[12,4],
@@ -105,6 +104,8 @@ function generateBoard(board) {
             tileEl.innerHTML = '<img src=' + chosenTiles[tileIndex][0] + '>';
             tileEl.innerHTML += '<div class="tile-clickable">';
             tileEl.innerHTML += '<div class="tile-border">';
+            tileEl.innerHTML += '<div class="tile-hitbox-left">';
+            tileEl.innerHTML += '<div class="tile-hitbox-right">';
             tileEl.style.top = tile[1] * tileTop + '%';
             tileEl.style.left = tile[0] * tileLeft + '%';
             tileIndex++;
@@ -113,32 +114,6 @@ function generateBoard(board) {
         boardEl.appendChild(levelEl);
         levelIndex++;
     });
-
-    /* let tileIndex = 0;
-    let levelIndex = 0;
-    board.forEach(level => {
-        let levelEl = document.createElement('div');
-        levelEl.classList.add('level');
-        level.forEach(row => {
-            let rowEl = document.createElement('div');
-            rowEl.classList.add('row');
-            for(let i = 0; i < row; i++ ) {
-                let tileEl = document.createElement('div');
-                tileEl.classList.add('tile');
-                tileEl.setAttribute('data-level', levelIndex)
-                tileEl.setAttribute('data-pattern-id', chosenTiles[tileIndex][1])
-                tileEl.innerHTML = '<img src=' + chosenTiles[tileIndex][0] + '>';
-                tileEl.innerHTML += '<div class="tile-clickable">';
-                tileEl.innerHTML += '<div class="tile-border">';
-                tileIndex++;
-                rowEl.appendChild(tileEl);
-            }
-            levelEl.appendChild(rowEl);
-            
-        });
-        boardEl.appendChild(levelEl);
-        levelIndex++;
-    }); */
 } 
 
 function shuffle(array) {
@@ -153,5 +128,3 @@ function shuffle(array) {
   
     return array;
 }
-
-generateBoard(board1)
