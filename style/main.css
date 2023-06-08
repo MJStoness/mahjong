@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    --tile-height: 70px;
+    --tile-height: min( calc( 0.073 * 100vh ), calc( 0.054 * 100vw ) );
     --chosen-color: #ffffff;
 }
   
@@ -18,6 +18,11 @@ body {
 .board {
     display: grid;
     grid-template: 1fr / 1fr;
+    position: relative;
+    /* outline: 1px solid aqua; */
+    width: calc( 15.47 * var(--tile-height) );
+    height: calc( 12.09 * var(--tile-height) );
+    position: relative;
 }
 
 .level {
@@ -34,42 +39,44 @@ body {
   
 .row {
     display: flex;
-    margin: 12px 0px 12px 0px;
+    margin-top: calc( 0.171 * var(--tile-height) );
+    margin-bottom: calc( 0.171 * var(--tile-height) );
     min-height: var(--tile-height);
 }
   
 .tile {
     /* outline: 1px solid red; */
     height: var(--tile-height);
-    height: 70px;
-    width: calc(70px * 1.46);
+    width: calc(var(--tile-height) * 1.46);
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0px -15px 0px -15px;
+    margin-right: calc( -0.214 * var(--tile-height) );
+    margin-left: calc( -0.214 * var(--tile-height) );
     pointer-events: auto;
-    position: relative;
+    position: absolute;
     transition: .2s;
 }
 .tile img {
     height: 155%;
     width: auto;
     pointer-events: none;
+    transition: .2s;
 }
 .tile.selected {
-    transform: translate(-3px, -3px) !important;
+    transform: translate(calc( -0.0429 * var(--tile-height) ), calc( -0.0429 * var(--tile-height) )) !important;
     /* filter: drop-shadow(0px 0px 10px #ee9520) !important; */
     
     transition: .2s;
 }
 .tile.selected .tile-border {
-    outline: 6px solid var(--chosen-color);
-    border-radius: 3px;
+    outline: calc( 0.0857 * var(--tile-height) ) solid var(--chosen-color);
+    border-radius: calc( 0.0429 * var(--tile-height) );
 }
 
 .tile-border {
     width: 64%;
-    transform: translate(-2px, -2px);
+    transform: translate(calc( -0.0286 * var(--tile-height) ), calc( -0.0286 * var(--tile-height) ));
     height: 125%;
     pointer-events: none;
     position: absolute;
@@ -79,14 +86,14 @@ body {
     position: absolute;
     width: 55%;
     transform: translateX(-2px);
-    height: 125%;
+    height: 121%;
     /* outline: 1px solid orange; */
 }
 
 @keyframes lift {
     from {}
     to {
-        transform: translate(-10px, -10px);
+        transform: translate(calc( -0.2429 * var(--tile-height) ), calc( -0.2429 * var(--tile-height) ));
         opacity: 0;
     }
 }

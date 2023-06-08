@@ -3,8 +3,8 @@ const tilesClickables = document.querySelectorAll('.tile-clickable');
 tilesClickables.forEach(tilesClickable => {
     const checkSides = (tile) => {
         let collisions = 0;
-        const row = tilesClickable.parentElement.parentElement;
-        const tiles = row.querySelectorAll('.tile')
+        const level = tilesClickable.parentElement.parentElement;
+        const tiles = level.querySelectorAll('.tile')
         tiles.forEach(tile2 => {
             if (overlap(tile, tile2)) {
                 collisions++;
@@ -18,6 +18,7 @@ tilesClickables.forEach(tilesClickable => {
         let collisions = 0;
         const levelPosition = parseInt(tile.getAttribute('data-level'));
         const level = document.querySelectorAll('.level')[levelPosition + 1];
+        console.log(level)
         if ( level ) {
             const tiles = level.querySelectorAll('.tile .tile-clickable')
             tile = tile.querySelector('.tile-clickable');
@@ -50,6 +51,7 @@ tilesClickables.forEach(tilesClickable => {
             board.style.pointerEvents = 'auto';
             tile1.remove();
             tile2.remove();
+            recalculateBrightness();
         }, duration);
     }
     
@@ -62,14 +64,14 @@ tilesClickables.forEach(tilesClickable => {
                 let selectedTile = document.querySelector('.tile.selected');
                 if ( selectedTile.getAttribute('data-pattern-id') == tile.getAttribute('data-pattern-id') && selectedTile != tile ) {
                     resetTiles();
-                    lift(tile, selectedTile)
+                    lift(tile, selectedTile);
                 } else {
                     resetTiles();
                     selectTile(tile);
                 }
             }
         } else {
-            
+
         }
         
     }
