@@ -27,14 +27,6 @@ const textures = [
 ];
 
 const board = [
-    [15, 8, 10, 12, 12, 10, 8, 15, 1],
-    [0, 6, 6, 6, 6, 6, 6, 0, 0],
-    [0, 0, 4, 4, 4, 4, 0, 0, 0],
-    [0, 0, 0, 2, 2, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0, 0],
-]
-
-const board1 = [
     [ 
         [1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0],
         [3,1],[4,1],[5,1],[6,1],[7,1],[8,1],[9,1],[10,1],
@@ -70,6 +62,16 @@ const board1 = [
     ]
 ]
 
+const debugBoard = [
+    [ 
+        [1,0],
+        [3,1],[4,1],[5,1],[6,1],
+        [2,2],[3,2]
+    ],
+    [
+        [1,0]
+    ]
+]
 
 function generateBoard(board) {
     let tileCount = 0;
@@ -93,7 +95,6 @@ function generateBoard(board) {
     let tileIndex = 0;
     let levelIndex = 0;
     board.forEach(level => {
-        console.log(level)
         let levelEl = document.createElement('div');
         levelEl.classList.add('level');
         level.forEach(tile => {
@@ -102,10 +103,11 @@ function generateBoard(board) {
             tileEl.setAttribute('data-level', levelIndex)
             tileEl.setAttribute('data-pattern-id', chosenTiles[tileIndex][1])
             tileEl.innerHTML = '<img src=' + chosenTiles[tileIndex][0] + '>';
-            tileEl.innerHTML += '<div class="tile-clickable">';
-            tileEl.innerHTML += '<div class="tile-border">';
-            tileEl.innerHTML += '<div class="tile-hitbox-left">';
-            tileEl.innerHTML += '<div class="tile-hitbox-right">';
+            tileEl.innerHTML += '<div class="tile-clickable">'+chosenTiles[tileIndex][1]+'</div>';
+            /* tileEl.innerHTML += '<div class="tile-clickable"></div>'; */
+            tileEl.innerHTML += '<div class="tile-border"></div>';
+            tileEl.innerHTML += '<div class="tile-hitbox-left"></div>';
+            tileEl.innerHTML += '<div class="tile-hitbox-right"></div>';
             tileEl.style.top = tile[1] * tileTop + '%';
             tileEl.style.left = tile[0] * tileLeft + '%';
             tileIndex++;

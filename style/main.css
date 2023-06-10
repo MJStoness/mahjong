@@ -67,6 +67,7 @@ body {
     width: auto;
     pointer-events: none;
     transition: .2s;
+    user-select: none;
 }
 .tile.selected {
     transform: translate(calc( -0.0429 * var(--tile-height) ), calc( -0.0429 * var(--tile-height) )) !important;
@@ -106,6 +107,10 @@ body {
 }
 .tile-hitbox-right {
     right: 0;
+}
+
+.tile.debug {
+    filter: invert(1);
 }
 
 #display {

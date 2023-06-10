@@ -1,54 +1,97 @@
-generateBoard(board1);
+generateBoard(board);
 recalculateBrightness();
 recalculateShift();
 
 const tilesClickables = document.querySelectorAll('.tile-clickable');
+let moves = 0;
 
-tilesClickables.forEach(tilesClickable => {
-    const checkSides = (tile) => {
-        let collisionsLeft = -1;
-        let collisionsRight = -1;
-        const left = tile.querySelector('.tile-hitbox-left');
-        const right = tile.querySelector('.tile-hitbox-right');
-        const level = tilesClickable.parentElement.parentElement;
-        const tiles = level.querySelectorAll('.tile')
+const checkSides = (tile) => {
+    let collisionsLeft = -1;
+    let collisionsRight = -1;
+    const left = tile.querySelector('.tile-hitbox-left');
+    const right = tile.querySelector('.tile-hitbox-right');
+    const level = tile.parentElement;
+    const tiles = level.querySelectorAll('.tile')
+    tiles.forEach(tile2 => {
+        if (overlap(left, tile2)) {
+            collisionsLeft++;
+        }
+    })
+    tiles.forEach(tile2 => {
+        if (overlap(right, tile2)) {
+            collisionsRight++;
+        }
+    })
+    if ( collisionsLeft == 0 || collisionsRight == 0 ) return true;
+    else return false;
+}
+
+const checkTop = (tile) => {
+    let collisions = 0;
+    const levelPosition = parseInt(tile.getAttribute('data-level'));
+    const level = document.querySelectorAll('.level')[levelPosition + 1];
+    if ( level ) {
+        const tiles = level.querySelectorAll('.tile .tile-clickable')
+        tile = tile.querySelector('.tile-clickable');
         tiles.forEach(tile2 => {
-            if (overlap(left, tile2)) {
-                collisionsLeft++;
+            if (overlap(tile, tile2)) {
+                collisions++;
             }
         })
-        tiles.forEach(tile2 => {
-            if (overlap(right, tile2)) {
-                collisionsRight++;
-            }
-        })
-        if ( collisionsLeft == 0 || collisionsRight == 0 ) return true;
-        else return false;
-        //console.log("Left: "+collisionsLeft+", Right: "+collisionsRight)
-        /* if ( collisions > 2 ) return false;
-        else return true; */
+        if ( collisions > 0 ) return false;
+        else return true;
+    } else {
+        return true;
     }
+}
 
-    const checkTop = (tile) => {
-        let collisions = 0;
-        const levelPosition = parseInt(tile.getAttribute('data-level'));
-        const level = document.querySelectorAll('.level')[levelPosition + 1];
-        console.log(level)
-        if ( level ) {
-            const tiles = level.querySelectorAll('.tile .tile-clickable')
-            tile = tile.querySelector('.tile-clickable');
-            tiles.forEach(tile2 => {
-                if (overlap(tile, tile2)) {
-                    collisions++;
-                }
-            })
-            if ( collisions > 0 ) return false;
-            else return true;
-        } else {
-            return true;
+const calculateAvailableMoves = () => {
+    const display = document.querySelector('#display span');
+    const tiles = document.querySelectorAll('.tile');
+    const freeTiles = [];
+    tiles.forEach(tile => {
+        //tile.classList.remove('debug');
+        if ( checkSides(tile) && checkTop(tile) ) { 
+            freeTiles.push(tile.getAttribute('data-pattern-id'));
+            //tile.classList.add('debug')
+        }
+    });
+    var count = {};
+        freeTiles.forEach(i => {
+            count[i] = (count[i]||0) + 1;
+        });
+
+    moves = 0;
+    for ( let key in count ) {
+        if ( count[key] > 1 ) {
+            /* console.log(key + ":")
+            console.log(count[key])
+            console.log(factorial(count[key]) / ( 2 * factorial( count[key] - 2 ))); */
+            moves += factorial(count[key]) / ( 2 * factorial( count[key] - 2 ) );
+            //console.log('=================')
         }
     }
+    //console.log('=================')
+    display.innerText = moves;
+}
 
+const lose = () => {
+    alert('you lost!');
+}
+
+const win = () => {
+    alert('you won!');
+}
+
+const checkState = () => {
+    const tileCount = document.querySelectorAll('.tile')?document.querySelectorAll('.tile').length:0;
+    if ( moves == 0 && tileCount > 0 ) lose();
+    else if ( moves == 0 && tileCount == 0 ) win();
+}
+
+calculateAvailableMoves();
+
+tilesClickables.forEach(tilesClickable => {
     const selectTile = (tile) => {
         tile.classList.add('selected');
     }
@@ -60,14 +103,16 @@ tilesClickables.forEach(tilesClickable => {
         const duration = 500 //(ms);
         const board = document.querySelector('.board');
         board.style.pointerEvents = 'none';
-        tile1.style.animation = 'lift ' + duration / 1000 + 's ease-out 0.01s 1';
-        tile2.style.animation = 'lift ' + duration / 1000 + 's ease-out 0.01s 1';
+        tile1.style.animation = 'lift ' + duration / 1000 + 's ease-out 0.01s 1 forwards';
+        tile2.style.animation = 'lift ' + duration / 1000 + 's ease-out 0.01s 1 forwards';
         setTimeout(() => {
             board.style.pointerEvents = 'auto';
             tile1.remove();
             tile2.remove();
             recalculateBrightness();
-        }, duration);
+            calculateAvailableMoves();
+            checkState();
+        }, duration + 10);
     }
     
     const tile = tilesClickable.parentElement;
@@ -80,6 +125,7 @@ tilesClickables.forEach(tilesClickable => {
                 if ( selectedTile.getAttribute('data-pattern-id') == tile.getAttribute('data-pattern-id') && selectedTile != tile ) {
                     resetTiles();
                     lift(tile, selectedTile);
+                    
                 } else {
                     resetTiles();
                     selectTile(tile);
@@ -102,4 +148,18 @@ function overlap(tile1, tile2) {
         tileRect1.bottom < tileRect2.top ||
         tileRect1.left > tileRect2.right
     );
+}
+
+function factorial(n) {
+    if ( n < 0 )
+        return false;
+    else if ( n == 0 || n == 1 )
+        return 1;
+    else {
+        let result = 1;
+        for ( let i = 1; i <= n; i++ ) {
+            result *= i;
+        }
+        return result;
+    }
 }
