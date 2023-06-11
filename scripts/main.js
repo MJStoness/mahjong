@@ -1,8 +1,14 @@
-generateBoard(board);
+let chosenBoard = boards.defaultBoard;
+
+generateBoard(chosenBoard);
 recalculateBrightness();
 recalculateShift();
+generateTileEvents();
 
-const tilesClickables = document.querySelectorAll('.tile-clickable');
+window.onresize = recalculateShift;
+
+const hintBtn = document.querySelector('#hint');
+const ui = document.querySelector('#ui');
 let moves = 0;
 
 const checkSides = (tile) => {
@@ -45,42 +51,59 @@ const checkTop = (tile) => {
     }
 }
 
+let count = {};
 const calculateAvailableMoves = () => {
     const display = document.querySelector('#display span');
     const tiles = document.querySelectorAll('.tile');
     const freeTiles = [];
     tiles.forEach(tile => {
-        //tile.classList.remove('debug');
-        if ( checkSides(tile) && checkTop(tile) ) { 
-            freeTiles.push(tile.getAttribute('data-pattern-id'));
-            //tile.classList.add('debug')
-        }
+        if ( checkSides(tile) && checkTop(tile) ) freeTiles.push(tile.getAttribute('data-pattern-id'));
     });
-    var count = {};
-        freeTiles.forEach(i => {
-            count[i] = (count[i]||0) + 1;
-        });
+    count = {};
+    freeTiles.forEach(i => {
+        count[i] = (count[i]||0) + 1;
+    });
 
     moves = 0;
     for ( let key in count ) {
         if ( count[key] > 1 ) {
-            /* console.log(key + ":")
-            console.log(count[key])
-            console.log(factorial(count[key]) / ( 2 * factorial( count[key] - 2 ))); */
             moves += factorial(count[key]) / ( 2 * factorial( count[key] - 2 ) );
-            //console.log('=================')
+        } else {
+            delete(count[key])
         }
     }
-    //console.log('=================')
     display.innerText = moves;
 }
 
-const lose = () => {
-    alert('you lost!');
+const showMove = () => {
+    if ( Object.keys(count).length ) {
+        const patternId = Object.keys(count)[0];
+        const tiles = document.querySelectorAll('.tile[data-pattern-id="' + patternId + '"]');
+        const freeTiles = [];
+        tiles.forEach(tile => {
+            if ( checkSides(tile) && checkTop(tile) ) freeTiles.push(tile);
+        });
+        for ( let i = 0; i < 2; i++ ) {
+            freeTiles[i].classList.add('hint');
+        } 
+        setTimeout(() => {
+            const tileHint = document.querySelectorAll('.tile.hint');
+            tileHint.forEach(tile => {
+            tile.classList.remove('hint');
+        });
+        }, 1000);
+    } else {
+        return false;
+    }
 }
 
-const win = () => {
-    alert('you won!');
+const resetGame = () => {
+    hideUi();
+    generateBoard(chosenBoard);
+    recalculateBrightness();
+    recalculateShift();
+    generateTileEvents();
+    calculateAvailableMoves();
 }
 
 const checkState = () => {
@@ -91,52 +114,66 @@ const checkState = () => {
 
 calculateAvailableMoves();
 
-tilesClickables.forEach(tilesClickable => {
-    const selectTile = (tile) => {
-        tile.classList.add('selected');
-    }
-    const resetTiles = () => {
-        const tile = document.querySelector('.tile.selected');
-        tile.classList.remove('selected');
-    }
-    const lift = (tile1, tile2) => {
-        const duration = 500 //(ms);
-        const board = document.querySelector('.board');
-        board.style.pointerEvents = 'none';
-        tile1.style.animation = 'lift ' + duration / 1000 + 's ease-out 0.01s 1 forwards';
-        tile2.style.animation = 'lift ' + duration / 1000 + 's ease-out 0.01s 1 forwards';
-        setTimeout(() => {
-            board.style.pointerEvents = 'auto';
-            tile1.remove();
-            tile2.remove();
-            recalculateBrightness();
-            calculateAvailableMoves();
-            checkState();
-        }, duration + 10);
-    }
-    
-    const tile = tilesClickable.parentElement;
-    tilesClickable.onclick = () => {
-        if ( checkSides(tile) && checkTop(tile) ) {
-            if ( !document.querySelector('.tile.selected') ) {
-                selectTile(tile);
-            } else {
-                let selectedTile = document.querySelector('.tile.selected');
-                if ( selectedTile.getAttribute('data-pattern-id') == tile.getAttribute('data-pattern-id') && selectedTile != tile ) {
-                    resetTiles();
-                    lift(tile, selectedTile);
-                    
-                } else {
-                    resetTiles();
-                    selectTile(tile);
-                }
-            }
-        } else {
-
+function generateTileEvents() {
+    const tilesClickables = document.querySelectorAll('.tile-clickable');
+    tilesClickables.forEach(tilesClickable => {
+        const selectTile = (tile) => {
+            tile.classList.add('selected');
+        }
+        const resetTiles = () => {
+            const tile = document.querySelector('.tile.selected');
+            tile.classList.remove('selected');
+            const tileHint = document.querySelectorAll('.tile.hint');
+            tileHint.forEach(tile => {
+                tile.classList.remove('hint');
+            });
+        }
+        const lift = (tile1, tile2) => {
+            const duration = 500 //(ms);
+            const board = document.querySelector('.board');
+            board.style.pointerEvents = 'none';
+            tile1.style.animation = 'lift ' + duration / 1000 + 's ease-out 0.01s 1 forwards';
+            tile2.style.animation = 'lift ' + duration / 1000 + 's ease-out 0.01s 1 forwards';
+            setTimeout(() => {
+                board.style.pointerEvents = 'auto';
+                tile1.remove();
+                tile2.remove();
+                recalculateBrightness();
+                calculateAvailableMoves();
+                checkState();
+            }, duration + 10);
         }
         
+        const tile = tilesClickable.parentElement;
+        tilesClickable.onclick = () => {
+            if ( checkSides(tile) && checkTop(tile) ) {
+                if ( !document.querySelector('.tile.selected') ) {
+                    selectTile(tile);
+                } else {
+                    let selectedTile = document.querySelector('.tile.selected');
+                    if ( selectedTile.getAttribute('data-pattern-id') == tile.getAttribute('data-pattern-id') && selectedTile != tile ) {
+                        resetTiles();
+                        lift(tile, selectedTile);
+                        
+                    } else {
+                        resetTiles();
+                        selectTile(tile);
+                    }
+                }
+            } else {
+
+            }
+            
+        }
+    });
+}
+
+hintBtn.onclick = () => {
+    if ( !document.querySelector('.tile.hint') ) {
+        showMove();
     }
-});
+    
+}
 
 function overlap(tile1, tile2) {
     const tileRect1 = tile1.getBoundingClientRect();

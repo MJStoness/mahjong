@@ -1,4 +1,4 @@
-const opacityMultiplier = 0.08;
+const opacityMultiplier = .1;
 
 const recalculateBrightness = () => {
     const levels = document.querySelectorAll('.level');

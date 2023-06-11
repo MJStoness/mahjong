@@ -3,10 +3,16 @@
 * {
     margin: 0;
     padding: 0;
+    outline: none;
+    border: none;
     --tile-height: min( calc( 0.073 * 100vh ), calc( 0.054 * 100vw ) );
     --chosen-color: #ffffff;
     --white: #ebe2d8;
     --border: #bdb5ad;
+    --hint-color: #ffd297;
+    --main-color: rgb(27, 102, 158);
+    --main-color-shadow: rgb(19, 75, 117);
+    /* color: var(--main-color); */
     font-family: 'Geologica', sans-serif;
 }
   
@@ -18,6 +24,102 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+button {
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: var(--main-color);
+    color: var(--white);
+    transition: .2s;
+    box-shadow: 0px 4px var(--main-color-shadow);
+}
+button:hover {
+    cursor: pointer;
+    transition: .2s;
+    box-shadow: 0px 6px var(--main-color-shadow);
+    transform: translateY(-2px);
+}
+button:active {
+    box-shadow: 0px 2px var(--main-color-shadow);
+    transform: translateY(2px);
+}
+
+#cover {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: rgb(0, 0, 0, 0.5);
+    z-index: 10;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: 1s opacity;
+}
+
+#ui {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 11;
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid var(--border);
+    display: flex;
+    visibility: hidden;
+    pointer-events: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 1s top;
+}
+
+#ui button {
+    margin-top: 20px;
+}
+
+#menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-opt i {
+    color: var(--white);
+    font-size: 25px;
+}
+.menu-opt:hover {
+    cursor: pointer;
+}
+
+#overhead {
+    position: absolute;
+    top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+#hint i {
+    color: var(--white);
+    font-size: 25px;
+}
+#hint:hover {
+    cursor: pointer;
+}
+
+#display {
+    background-color: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .board {
@@ -44,6 +146,7 @@ body {
   
 .row {
     display: flex;
+    --margin: 0.2;
     margin-top: calc( 0.171 * var(--tile-height) );
     margin-bottom: calc( 0.171 * var(--tile-height) );
     min-height: var(--tile-height);
@@ -61,6 +164,8 @@ body {
     pointer-events: auto;
     position: absolute;
     transition: .2s;
+    /* opacity: 0; */
+    /* animation: tile-in 0.2s ease-out 0s 1 forwards; */
 }
 .tile img {
     height: 155%;
@@ -77,7 +182,11 @@ body {
 }
 .tile.selected .tile-border {
     outline: calc( 0.0857 * var(--tile-height) ) solid var(--chosen-color);
-    border-radius: calc( 0.0429 * var(--tile-height) );
+}
+.tile.hint .tile-border {
+    outline: calc( 0.0857 * var(--tile-height) ) solid var(--hint-color);
+    animation: hint 0.5s linear 0s 2 forwards;
+    transition: .2s;
 }
 
 .tile-border {
@@ -86,14 +195,19 @@ body {
     height: 125%;
     pointer-events: none;
     position: absolute;
+    border-radius: calc( 0.0429 * var(--tile-height) );
+    
 }
 
 .tile-clickable {
     position: absolute;
     width: 55%;
     transform: translateX(-2px);
-    height: 121%;
+    height: 120%;
     /* outline: 1px solid orange; */
+}
+.tile-clickable:hover {
+    cursor: pointer;
 }
 
 .tile-hitbox-left, .tile-hitbox-right {
@@ -113,19 +227,32 @@ body {
     filter: invert(1);
 }
 
-#display {
-    position: absolute;
-    top: 10px;
-    background-color: var(--white);
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    padding: 10px;
-}
-
 @keyframes lift {
     from {}
     to {
         transform: translate(calc( -0.2429 * var(--tile-height) ), calc( -0.2429 * var(--tile-height) ));
         opacity: 0;
+    }
+}
+
+@keyframes hint {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes tile-in {
+    from {
+        transform: translate(calc( -1 * var(--tile-height) ), calc( -1 * var(--tile-height) ));
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
