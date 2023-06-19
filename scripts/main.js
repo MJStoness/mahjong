@@ -1,6 +1,7 @@
-let chosenBoard = boards.defaultBoard;
+let chosenBoard = 0;
+let gameOngoing = false;
 
-generateBoard(chosenBoard);
+generateBoard(boards[chosenBoard]);
 recalculateBrightness();
 recalculateShift();
 generateTileEvents();
@@ -99,7 +100,7 @@ const showMove = () => {
 
 const resetGame = () => {
     hideUi();
-    generateBoard(chosenBoard);
+    generateBoard(boards[chosenBoard]);
     recalculateBrightness();
     recalculateShift();
     generateTileEvents();
@@ -118,6 +119,7 @@ function generateTileEvents() {
     const tilesClickables = document.querySelectorAll('.tile-clickable');
     tilesClickables.forEach(tilesClickable => {
         const selectTile = (tile) => {
+            playClick();
             tile.classList.add('selected');
         }
         const resetTiles = () => {
@@ -129,6 +131,7 @@ function generateTileEvents() {
             });
         }
         const lift = (tile1, tile2) => {
+            playSlide();
             const duration = 500 //(ms);
             const board = document.querySelector('.board');
             board.style.pointerEvents = 'none';
@@ -153,6 +156,8 @@ function generateTileEvents() {
                     let selectedTile = document.querySelector('.tile.selected');
                     if ( selectedTile.getAttribute('data-pattern-id') == tile.getAttribute('data-pattern-id') && selectedTile != tile ) {
                         resetTiles();
+                        gameOngoing = gameOngoing || true;
+                        playClick();
                         lift(tile, selectedTile);
                         
                     } else {

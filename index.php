@@ -15,15 +15,18 @@
 
     <div id="overhead">
         <div id="display">Available moves: <span></span></div>
-        <div id="hint" title="Hint!"><i class="fa-solid fa-question"></i></div>
+        <div id="hint" title="Hint!" class="btn-sound"><i class="fa-solid fa-question"></i></div>
     </div>
 
     <div id="menu">
-        <div class="menu-opt">
+        <div class="menu-opt btn-sound">
             <i class="fa-solid fa-user"></i>
         </div>
-        <div class="menu-opt">
-            <i class="fa-solid fa-gear"></i>
+        <div class="menu-opt btn-sound" id="boards-btn" title="Choose a board!">
+            <i class="fa-solid fa-chess-board"></i>
+        </div>
+        <div class="menu-opt btn-sound" id="leaderboard-id" title="Leaderboard!">
+            <i class="fa-solid fa-list"></i>
         </div>
     </div>
     <div id="cover"></div>
@@ -32,9 +35,12 @@
 <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="scripts/boards.js"></script>
 <script type="text/babel" src="scripts/ui.js"></script>
+<script src="scripts/menu.js"></script>
 <script src="scripts/boardGeneration.js"></script>
 <script src="scripts/stacking.js"></script>
 <script type="text/babel" src="scripts/main.js"></script>
+<script src="scripts/sounds.js"></script>
 
 </html>

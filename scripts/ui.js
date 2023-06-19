@@ -7,7 +7,7 @@ function WinScreen({score}) {
         <>
             <h1>You Won!</h1>
             <p>{ score && scoreTitle + score }</p>
-            <button id='resetGame' >Play again!</button>
+            <button id='resetGame' className='btn-sound'>Play again!</button>
         </>
     )
 }
@@ -18,9 +18,36 @@ function LoseScreen({score}) {
         <>
             <h1>You Lost!</h1>
             <p>{ score && scoreTitle + score }</p>
-            <button id='resetGame' >Try again!</button>
+            <button id='resetGame' className='btn-sound'>Try again!</button>
         </>
     )
+}
+
+function BoardPreview({board, index}) {
+    return (
+        index == chosenBoard?<li className='chosen btn-sound' data-id={`${index}`}>{board.name}</li>:<li className='btn-sound' data-id={`${index}`}>{board.name}</li>
+    )
+}
+
+function Boards({boards}) {
+    return (
+        <>
+            <h1>Choose a board:</h1>
+            <div id='stock-boards' className='board-list'>
+                <h2>Stock Layouts:</h2>
+                <ul className='interactive-list'>
+                    { boards.map((board, index) => 
+                        <BoardPreview board={board} index={index}/>)}
+                </ul>
+            </div>
+        </>
+    )
+}
+
+const showBoards = () => {
+    showUi();
+    ReactDOM.render(<Boards boards={boards}/>, ui);
+    updateBtnSounds();
 }
 
 const win = (score) => {
@@ -29,13 +56,15 @@ const win = (score) => {
     document.querySelector('#resetGame').onclick = () => {
         resetGame();
     };
+    updateBtnSounds();
 }
 const lose = () => {
     showUi();
     ReactDOM.render(<LoseScreen/>, ui);
     document.querySelector('#resetGame').onclick = () => {
         resetGame();
-    }
+    };
+    updateBtnSounds();
 }
 
 const cover = () => {
@@ -55,7 +84,7 @@ const showUi = () => {
     cover();
     ui.style.visibility = 'visible';
     ui.style.pointerEvents = 'all';
-    ui.style.top = '50%';
+    ui.style.top = '50%';  
 }
 const hideUi = () => {
     uncover();
