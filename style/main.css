@@ -14,7 +14,8 @@
     --main-color: rgb(27, 102, 158);
     --main-color-shadow: rgb(19, 75, 117);
     --bg-dark: #d6cbbf;
-    /* color: var(--main-color); */
+    --text-light: #504c47;
+    color: black;
     font-family: 'Geologica', sans-serif;
 }
   
@@ -36,6 +37,17 @@ button {
     color: var(--white);
     transition: .2s;
     box-shadow: 0px 4px var(--main-color-shadow);
+}
+button.iziToast-close {
+    box-shadow: none;
+}
+button.iziToast-close:hover {
+    box-shadow: none;
+    transform: none;
+}
+button.iziToast-close:active {
+    box-shadow: none;
+    transform: none;
 }
 button:hover {
     cursor: pointer;
@@ -73,6 +85,88 @@ li {
     cursor: pointer;
     transform: translateX(10px);
     transition: .2s;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    outline: 1px solid  var(--text-light);
+    border-radius: 5px;
+    padding: 7px;
+    transition: .1s;
+}
+label {
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-light);
+    width: 100%;
+    transition: .1s;
+}
+label:not(:first-child) {
+    margin-top: 10px;
+}
+
+label.focused {
+    color: var(--main-color);
+    transition: .1s;
+}
+input:focus {
+    outline-color: var(--main-color);
+    color: var(--main-color);
+    transition: .1s;
+}
+
+table {
+    table-layout: fixed; 
+}
+
+td {
+    background-color: var(--bg-dark);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.row {
+    display: flex;
+}
+
+.errorMsg {
+    margin-top: 5px;
+    font-style: italic;
+    font-size: 15px;
+    color: #f00;
+    max-width: 207px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+.close-btn:hover {
+    cursor: pointer;
+}
+.close-btn i {
+    font-size: 30px;
+    color: var(--border-shadow);
+}
+
+.spacer {
+    min-height: 15px;
+}
+
+.tiny-btn {
+    margin-top: 20px;
+    color: var(--text-light);
+}
+.tiny-btn:hover {
+    cursor: pointer;
 }
 
 #cover {
@@ -124,6 +218,48 @@ li {
     margin-right: auto;
     margin-left: 10px;
 }
+
+/* USER ACCOUNT */
+
+#userDataDisplay {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pfpDisplay {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 100px;
+    outline: 2px solid var(--border);
+    margin-right: 20px;
+}
+
+.usernameDisplay {
+    font-size: 20px;
+    color: var(--text-light);
+    font-weight: bold;
+}
+
+.userDateDisplay {
+    text-transform: uppercase;
+    color: var(--border-shadow);
+    font-weight: bold;
+    font-size: 12px;
+}
+
+#winsDisplay, #winsDisplay i {
+    color: var(--main-color);
+}
+#winsDisplay, #losesDisplay {
+    width: 50%;
+}
+#losesDisplay, #losesDisplay i {
+    color: #df2a2a;
+}
+
+/* ============ */
 
 #menu {
     position: absolute;

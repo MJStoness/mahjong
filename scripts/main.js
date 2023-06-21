@@ -5,6 +5,7 @@ generateBoard(boards[chosenBoard]);
 recalculateBrightness();
 recalculateShift();
 generateTileEvents();
+getUserData();
 
 window.onresize = recalculateShift;
 
@@ -108,8 +109,18 @@ const resetGame = () => {
 }
 
 const checkState = () => {
+    const caseOnTop = () => {
+        const tiles = document.querySelectorAll('.tile');
+
+        if ( moves != 0 || !tiles.length ) return false;
+
+        if ( tiles[0].dataset.patternId == tiles[1].dataset.patternId ) return true;
+        else return false;
+    }
+
     const tileCount = document.querySelectorAll('.tile')?document.querySelectorAll('.tile').length:0;
-    if ( moves == 0 && tileCount > 0 ) lose();
+    if ( moves == 0 && caseOnTop() ) win();
+    else if ( moves == 0 && tileCount > 0 ) lose();
     else if ( moves == 0 && tileCount == 0 ) win();
 }
 
