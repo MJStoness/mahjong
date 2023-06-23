@@ -15,7 +15,7 @@
 
             if ( isset($_COOKIE['session']) && $uid = auth($_COOKIE['session'], $connection) ) {
                 //USER LOGGED IN
-                if ( $serverResponse->data = pullUserData($uid, $connection) ) {
+                if ( $serverResponse->data = pullUserData($_POST['fid'], $connection) ) {
                     $serverResponse->success = true;
                 } else {
                     $serverResponse->error = 'Data not recieved!';

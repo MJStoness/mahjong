@@ -2,8 +2,8 @@
 
     require_once 'config.php';
 
-    mysqli_report(MYSQLI_REPORT_STRICT);
-    error_reporting(0);
+    /* mysqli_report(MYSQLI_REPORT_STRICT);
+    error_reporting(0); */
 
     $connection = new mysqli($servername, $username, $passwd, $dbname);
 
@@ -46,6 +46,22 @@
                 $validationFlag = false;
                 $serverResponse->error['passwderror'] = 'Password has to contain 6 to 25 characters and contain at lest one letter and special sign or a number!';
             }
+
+            $query = "SELECT username FROM user WHERE username='".mysqli_real_escape_string($connection, htmlentities($username, ENT_QUOTES, "UTF-8"))."'";
+            $result = $connection->query($query);
+            if ( $result->fetch_row() ) {
+                $validationFlag = false;
+                $serverResponse->error['usernameerror'] = 'This username is already used!';
+            }
+            unset($result);
+
+            $query = "SELECT email FROM user WHERE email='".mysqli_real_escape_string($connection, htmlentities($email, ENT_QUOTES, "UTF-8"))."'";
+            $result = $connection->query($query);
+            if ( $result->fetch_row() ) {
+                $validationFlag = false;
+                $serverResponse->error['emailerror'] = 'This email is already used!';
+            }
+            unset($result);
 
             if ( $validationFlag ) {
                 //$serverResponse->success = true;

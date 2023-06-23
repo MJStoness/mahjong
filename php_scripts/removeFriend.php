@@ -11,14 +11,22 @@
         if ( $connection->connect_errno ) {
             throw new Exception();
         } else {
+            $friends = [];
             $serverResponse = new Response();
 
             if ( isset($_COOKIE['session']) && $uid = auth($_COOKIE['session'], $connection) ) {
                 //USER LOGGED IN
-                if ( $serverResponse->data = pullUserData($uid, $connection) ) {
+                $query = "DELETE FROM friend WHERE user_id=$uid AND friend_id=".$_POST['fid'];
+                
+                if ( $connection->query($query) ) {
                     $serverResponse->success = true;
+                    $serverResponse->notification = [ 
+                        'title' => 'Success!',
+                        'msg' => 'Friend removed!',
+                        'color' => 'green' 
+                    ];
                 } else {
-                    $serverResponse->error = 'Data not recieved!';
+                    $serverResponse->error = 'Query failed!';
                 }
             } else {
                 //USER NOT LOGGED IN

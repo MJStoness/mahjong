@@ -2,8 +2,8 @@
 
     require_once 'config.php';
 
-    mysqli_report(MYSQLI_REPORT_STRICT);
-    error_reporting(0);
+    /*mysqli_report(MYSQLI_REPORT_STRICT);
+    error_reporting(0);*/
 
     $connection = new mysqli($servername, $username, $passwd, $dbname);
 

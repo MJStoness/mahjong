@@ -4,7 +4,6 @@
     $passwd = "";
     $dbname = "mahjong";
 
-    define('EMPTY_FIELD_ERROR', 'Pole jest puste!');
     define('PROFILE_PICTURE_PATH', 'userData/profile_pictures/');
 
     function auth(string $token, mysqli $connection) {
@@ -20,16 +19,17 @@
         }
     }
 
-    function pullUserData($uid, mysqli $connection) {
-        $query = "SELECT username, email, profile_picture, concat(DAY(joined),' ',MONTHNAME(joined),' ',YEAR(joined)) as joined_date, games_played, wins, loses FROM user WHERE `user_id`=$uid";
+    function pullUserData($uid, mysqli $connection, bool $extended = true) {
+        $query = "SELECT username, email, profile_picture, concat(DAY(joined),' ',MONTHNAME(joined),' ',YEAR(joined)) as joined_date, (SELECT COUNT(user_id) FROM `friend` GROUP BY user_id HAVING user_id=$uid) as friend_count, games_played, wins, loses FROM user WHERE `user_id`=$uid";
         $response = $connection->query($query);
         if ( $userRow = $response->fetch_assoc() ) {
             return [
                 'username' => $userRow['username'],
-                'email' => $userRow['email'],
+                'email' => $extended?$userRow['email']:'',
                 'pfp' => PROFILE_PICTURE_PATH.$userRow['profile_picture'],
                 'joined' => $userRow['joined_date'],
                 'gamesPlayed' => $userRow['games_played'],
+                'friendCount' => $userRow['friend_count'],
                 'wins' => $userRow['wins'],
                 'loses' => $userRow['loses']
             ];
@@ -53,7 +53,13 @@
         }
     }
 
-    //function createSession
+    function fetchAllToArray(array &$arr, $response) {
+        $i=0;
+        while ( $row = $response->fetch_assoc() ) {
+            $arr[$i] = $row;
+            $i++;
+        }
+    }
 
     /* function colToString(array $arr, mixed $col, string $separator) {
         $toString = array();
@@ -62,14 +68,6 @@
         }
 
         return implode($separator,$toString);
-    }
-
-    function fetchAllToArray(array &$arr, $response) {
-        $i=0;
-        while ( $row = $response->fetch_assoc() ) {
-            $arr[$i] = $row;
-            $i++;
-        }
     }
 
     function getRowByValueAtIndex(array $arr, mixed $index, mixed $value) {

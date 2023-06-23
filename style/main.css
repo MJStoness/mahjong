@@ -15,6 +15,7 @@
     --main-color-shadow: rgb(19, 75, 117);
     --bg-dark: #d6cbbf;
     --text-light: #504c47;
+    --red: #df2a2a;
     color: black;
     font-family: 'Geologica', sans-serif;
 }
@@ -64,6 +65,10 @@ ul {
    list-style: none;
    padding-left: 10px; 
 }
+ul#friend-list {
+    padding: 0;
+    min-width: 213px;
+}
 
 li {
     background-color: var(--bg-dark);
@@ -98,6 +103,7 @@ input {
     border-radius: 5px;
     padding: 7px;
     transition: .1s;
+    width: 193px;
 }
 label {
     text-transform: uppercase;
@@ -132,6 +138,13 @@ td {
     text-align: center;
 }
 
+.show {
+    visibility: visible;
+}
+.hidden {
+    visibility: hidden;
+}
+
 .row {
     display: flex;
 }
@@ -140,25 +153,36 @@ td {
     margin-top: 5px;
     font-style: italic;
     font-size: 15px;
-    color: #f00;
+    color: var(--red);
     max-width: 207px;
 }
 
-.close-btn {
+.close-btn, .back-btn {
     position: absolute;
     top: 15px;
-    right: 15px;
 }
-.close-btn:hover {
+.close-btn:hover, .back-btn:hover {
     cursor: pointer;
 }
-.close-btn i {
+.close-btn i, .back-btn i {
     font-size: 30px;
     color: var(--border-shadow);
 }
 
+.close-btn {
+    right: 15px;
+}
+
+.back-btn {
+    left: 15px;
+}
+
+.back-btn i {
+    font-size: 26px;
+}
+
 .spacer {
-    min-height: 15px;
+    min-height: 16px;
 }
 
 .tiny-btn {
@@ -219,6 +243,28 @@ td {
     margin-left: 10px;
 }
 
+.search-bar {
+    position: relative;
+    margin-bottom: 20px;
+}
+.search-bar input {
+    padding-right: 40px;
+}
+.search-bar input:focus + #search-btn i {
+    color: var(--main-color);
+}
+.search-bar #search-btn i {
+    font-size: 20px;
+    color: var(--text-light);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#search-btn:hover {
+    cursor: pointer;
+}
+
 /* USER ACCOUNT */
 
 #userDataDisplay {
@@ -249,6 +295,19 @@ td {
     font-size: 12px;
 }
 
+#friendsDisplay, #friendsDisplay i {
+    text-transform: uppercase;
+    color: var(--border-shadow);
+    font-weight: bold;
+    font-size: 17px;
+    margin-left: 3px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+#friendsDisplay:hover {
+    cursor: pointer;
+}
+
 #winsDisplay, #winsDisplay i {
     color: var(--main-color);
 }
@@ -256,8 +315,115 @@ td {
     width: 50%;
 }
 #losesDisplay, #losesDisplay i {
-    color: #df2a2a;
+    color: var(--red);
 }
+
+/* ============ */
+
+/* FRIENDS */
+
+.friendPfp {
+    height: 30px;
+    width: 30px;
+    border-radius: 20px;
+    object-fit: cover;
+    outline: 2px solid var(--border);
+}
+
+#friend-list {
+    max-height: 385px;
+    overflow-y: scroll;
+}
+#friend-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: .1s;
+    color: var(--text-light);
+}
+#friend-list li:hover {
+    cursor: pointer;
+    transition: .1s;
+    color: #000;
+}
+#friend-list li:hover .delete-btn i {
+    color: var(--border-shadow);
+    transition: color .1s;
+}
+#friend-list li:hover .invite-btn i {
+    color: var(--main-color);
+    transition: color .1s;
+}
+#friend-list p {
+    text-align: center;
+    font-size: 22px;
+    color: var(--text-light);
+}
+#friend-list p i {
+    margin-top: 10px;
+    font-size: 60px;
+    color: var(--text-light);
+}
+
+.friend-menu {
+    display: flex;
+    margin-left: auto;
+    position: relative;
+    gap: 10px;
+}
+
+.delete-btn {
+    position: absolute;
+    right: 0;
+}
+.delete-btn:hover {
+    cursor: pointer;
+}
+.delete-btn i {
+    color: var(--border);
+    transition: color .1s;
+}
+
+.invite-btn:hover {
+    cursor: pointer;
+}
+.invite-btn i {
+    color: var(--text-light);
+    transition: color .1s;
+}
+
+.confirm-btn i {
+    color: var(--main-color);
+}
+.cancel-btn i {
+    color: var(--red);
+}
+
+#add-friends {
+    margin-top: 15px;
+    margin-left: 2px;
+    margin-right: auto;
+    font-size: 23px;
+    color: var(--border-shadow);
+    transition: color .1s;
+}
+#add-friends i {
+    font-size: 23px;
+    color: var(--border-shadow);
+    transition: color .1s;
+    margin-right: 5px;
+}
+#add-friends:hover {
+    cursor: pointer;
+    color: var(--main-color);
+    transition: color .1s;
+}
+#add-friends:hover i {
+    color: var(--main-color);
+    transition: color .1s;
+}
+
+
 
 /* ============ */
 
